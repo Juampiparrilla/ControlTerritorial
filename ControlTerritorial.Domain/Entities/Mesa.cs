@@ -4,8 +4,15 @@
     {
         public int Id { get; private set; }
         public int NroMesa { get; private set; }
-        public string Orden { get; private set; }      
-        public Mesa()
+        public string Orden { get; private set; }
+
+        // EF - Relacion 1 : N con Escuela
+        public int EscuelaId { get; private set; }  
+        public Escuela Escuela { get; private set; }
+
+        // EF - Relacion 1 : N con Persona
+        public List<Persona> Personas { get; private set; } = new();
+        private Mesa()
         {
         }
 

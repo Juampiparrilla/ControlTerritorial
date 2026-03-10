@@ -10,9 +10,21 @@ namespace ControlTerritorial.Domain.Entities
         public string DNI { get; private set; }
         public PersonRole Rol { get; private set; }
         public string? Telefono { get; private set; }
+        // EF - Propiedad de navegación
         public Escuela? Escuela { get; private set; }
+        // EF - Relacion N : 1 con Escuela
+        public int? EscuelaId { get; private set; }        
 
-        public Persona()
+        // Relación jerárquica política
+        public int? LiderId { get; private set; }
+        public Persona? Lider { get; private set; }
+        public List<Persona> Subordinados { get; private set; } = new();
+
+        // EF - Relacion N : 1 con Mesa
+        public int? MesaId { get; private set; }
+        public Mesa? Mesa { get; private set; }
+
+        private Persona()
         {
         }
         public Persona(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
