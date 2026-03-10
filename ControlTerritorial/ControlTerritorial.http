@@ -1,0 +1,6 @@
+@ControlTerritorial_HostAddress = http://localhost:5182
+
+GET {{ControlTerritorial_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+
+*.user
+*.suo
+*.cache
+*.log
+
+node_modules/
+dist/
+build/
