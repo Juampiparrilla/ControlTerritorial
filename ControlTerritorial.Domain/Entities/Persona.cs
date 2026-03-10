@@ -8,14 +8,14 @@ namespace ControlTerritorial.Domain.Entities
         public string Nombre { get; private set; }
         public string Apellido { get; private set; }
         public string DNI { get; private set; }
-        public RolePersona Rol { get; private set; }
+        public PersonRole Rol { get; private set; }
         public string? Telefono { get; private set; }
         public Escuela? Escuela { get; private set; }
 
         public Persona()
         {
         }
-        public Persona(string nombre, string apellido, string dni, RolePersona rol, string? telefono, Escuela? escuela)
+        public Persona(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
         {
             if (string.IsNullOrEmpty(nombre))
             {

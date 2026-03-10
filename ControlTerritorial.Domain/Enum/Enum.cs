@@ -1,6 +1,6 @@
 ﻿namespace ControlTerritorial.Domain.Enum
 {
-    public enum RolePersona
+    public enum PersonRole
     {
         Administrador,         // Puede gestionar usuarios, roles, permisos y ver toda la Información de todos los grupos.
         Grupo,                 // Puede gestionar su propia Información, ver la Información de sus miembros (Referentes y Punteros).
@@ -10,7 +10,7 @@
         Chofer
     }
 
-    public enum RoleAuto
+    public enum VehicleType
     {
         Auto,
         Colectivo,
