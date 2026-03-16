@@ -1,6 +1,7 @@
 using ControlTerritorial.Application.Contracts;
 using ControlTerritorial.Domain.Common;
 using ControlTerritorial.Domain.Entities;
+using ControlTerritorial.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlTerritorial.Infrastructure.Implementations
@@ -28,24 +29,61 @@ namespace ControlTerritorial.Infrastructure.Implementations
             }
         }
 
-        public Task DeleteAsync(int id)
+        public async Task UpdateAsync(Persona entity)
         {
-            throw new NotImplementedException();
+            _context.Personas.Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Persona>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var persona = await _context.Personas.FindAsync(id);
+            if (persona is null)
+            {
+                return;
+            }
+
+            _context.Personas.Remove(persona);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Persona?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Persona>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Personas.ToListAsync();
         }
 
-        public Task UpdateAsync(Persona entity)
+        public async Task<Persona?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Personas.FindAsync(id);
+        }
+
+        public async Task<Persona?> GetByDniAsync(string dni)
+        {
+            return await _context.Personas.FirstOrDefaultAsync(p => p.DNI == dni);
+        }
+
+        public async Task<IEnumerable<Persona>> BuscarPorNombreOApellidoAsync(string? nombre, string? apellido)
+        {
+            IQueryable<Persona> query = _context.Personas;
+
+            if (!string.IsNullOrWhiteSpace(nombre))
+            {
+                query = query.Where(p => p.Nombre.Contains(nombre));
+            }
+
+            if (!string.IsNullOrWhiteSpace(apellido))
+            {
+                query = query.Where(p => p.Apellido.Contains(apellido));
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Persona>> BuscarPorRolAsync(PersonRole rol)
+        {
+            return await _context.Personas
+                .Where(p => p.Rol == rol)
+                .ToListAsync();
         }
     }
 }

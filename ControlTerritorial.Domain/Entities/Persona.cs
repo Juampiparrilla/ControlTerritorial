@@ -1,4 +1,4 @@
-﻿using ControlTerritorial.Domain.Enum;
+using ControlTerritorial.Domain.Enum;
 
 namespace ControlTerritorial.Domain.Entities
 {
@@ -27,6 +27,7 @@ namespace ControlTerritorial.Domain.Entities
         private Persona()
         {
         }
+
         public Persona(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
         {
             if (string.IsNullOrEmpty(nombre))
@@ -38,7 +39,31 @@ namespace ControlTerritorial.Domain.Entities
             {
                 throw new ArgumentException("El Apellido no puede ser nulo o vacío.", nameof(apellido));
             }
-             if (string.IsNullOrEmpty(dni))
+            if (string.IsNullOrEmpty(dni))
+            {
+                throw new ArgumentException("El DNI no puede estar vacío.", nameof(dni));
+            }
+
+            Nombre = nombre;
+            Apellido = apellido;
+            DNI = dni;
+            Rol = rol;
+            Telefono = telefono;
+            Escuela = escuela;
+        }
+
+        public void ActualizarDatos(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
+        {
+            if (string.IsNullOrEmpty(nombre))
+            {
+                throw new ArgumentException("El nombre no puede ser nulo o vacío.", nameof(nombre));
+            }
+
+            if (string.IsNullOrEmpty(apellido))
+            {
+                throw new ArgumentException("El Apellido no puede ser nulo o vacío.", nameof(apellido));
+            }
+            if (string.IsNullOrEmpty(dni))
             {
                 throw new ArgumentException("El DNI no puede estar vacío.", nameof(dni));
             }

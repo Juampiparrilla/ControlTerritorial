@@ -1,4 +1,7 @@
+using ControlTerritorial.Application.Contracts;
+using ControlTerritorial.Application.Implementations;
 using ControlTerritorial.Infrastructure;
+using ControlTerritorial.Infrastructure.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +22,9 @@ builder.Configuration
 
 builder.Services.AddDbContext<DbContextControlTerritorial>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IPersonaService,PersonaService>();
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
 
 var app = builder.Build();
 
