@@ -10,3 +10,7 @@ obj/
 node_modules/
 dist/
 build/
+
+# Configuración local con credenciales
+appsettings.json
+ControlTerritorial/appsettings.Development.json

@@ -3,7 +3,7 @@
     public class Escuela
     {
         public int Id { get; private set; }
-        public string NombreEstablecimiento { get; private set; }
+        public string? NombreEstablecimiento { get; private set; }
        
         // EF - Relacion 1 : N con Mesas
         public List<Mesa> Mesas { get; private set; } = new List<Mesa>();

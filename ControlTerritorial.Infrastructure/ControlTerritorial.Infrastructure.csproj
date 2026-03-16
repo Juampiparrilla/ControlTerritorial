@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ControlTerritorial.Application\ControlTerritorial.Application.csproj" />
     <ProjectReference Include="..\ControlTerritorial.Domain\ControlTerritorial.Domain.csproj" />
   </ItemGroup>
 
