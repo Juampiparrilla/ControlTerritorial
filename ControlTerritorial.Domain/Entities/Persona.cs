@@ -28,7 +28,7 @@ namespace ControlTerritorial.Domain.Entities
         {
         }
 
-        public Persona(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
+        public Persona(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela, int? liderId)
         {
             if (string.IsNullOrEmpty(nombre))
             {
@@ -50,9 +50,10 @@ namespace ControlTerritorial.Domain.Entities
             Rol = rol;
             Telefono = telefono;
             Escuela = escuela;
+            LiderId = liderId;
         }
 
-        public void ActualizarDatos(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela)
+        public void ActualizarDatos(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela, int? liderId)
         {
             if (string.IsNullOrEmpty(nombre))
             {
@@ -74,6 +75,7 @@ namespace ControlTerritorial.Domain.Entities
             Rol = rol;
             Telefono = telefono;
             Escuela = escuela;
+            LiderId = liderId;
         }
     }
 }

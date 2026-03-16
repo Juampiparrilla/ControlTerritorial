@@ -1,5 +1,6 @@
 using ControlTerritorial.Application.Contracts;
 using ControlTerritorial.Application.DTOs;
+using ControlTerritorial.Domain.Entities;
 using ControlTerritorial.Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,19 +28,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var responses = result.Value!
-                .Select(entity => new PersonaResponseDTO
-                {
-                    Id = entity.Id,
-                    Nombre = entity.Nombre,
-                    Apellido = entity.Apellido,
-                    DNI = entity.DNI,
-                    Rol = entity.Rol,
-                    Telefono = entity.Telefono,
-                    EscuelaId = entity.EscuelaId,
-                    EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                    MesaId = entity.MesaId,
-                    NroMesa = entity.Mesa?.NroMesa
-                });
+                .Select(entity => MapToResponse(entity));
 
             return Ok(responses);
         }
@@ -55,19 +44,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var responses = result.Value!
-                .Select(entity => new PersonaResponseDTO
-                {
-                    Id = entity.Id,
-                    Nombre = entity.Nombre,
-                    Apellido = entity.Apellido,
-                    DNI = entity.DNI,
-                    Rol = entity.Rol,
-                    Telefono = entity.Telefono,
-                    EscuelaId = entity.EscuelaId,
-                    EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                    MesaId = entity.MesaId,
-                    NroMesa = entity.Mesa?.NroMesa
-                });
+                .Select(entity => MapToResponse(entity));
 
             return Ok(responses);
         }
@@ -82,22 +59,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var entity = result.Value!;
-
-            var response = new PersonaResponseDTO
-            {
-                Id = entity.Id,
-                Nombre = entity.Nombre,
-                Apellido = entity.Apellido,
-                DNI = entity.DNI,
-                Rol = entity.Rol,
-                Telefono = entity.Telefono,
-                EscuelaId = entity.EscuelaId,
-                EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                MesaId = entity.MesaId,
-                NroMesa = entity.Mesa?.NroMesa
-            };
-
-            return Ok(response);
+            return Ok(MapToResponse(entity));
         }
 
         [HttpGet("getAll")]
@@ -111,19 +73,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var responses = result.Value!
-                .Select(entity => new PersonaResponseDTO
-                {
-                    Id = entity.Id,
-                    Nombre = entity.Nombre,
-                    Apellido = entity.Apellido,
-                    DNI = entity.DNI,
-                    Rol = entity.Rol,
-                    Telefono = entity.Telefono,
-                    EscuelaId = entity.EscuelaId,
-                    EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                    MesaId = entity.MesaId,
-                    NroMesa = entity.Mesa?.NroMesa
-                });
+                .Select(entity => MapToResponse(entity));
 
             return Ok(responses);
         }
@@ -138,22 +88,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var entity = result.Value!;
-
-            var response = new PersonaResponseDTO
-            {
-                Id = entity.Id,
-                Nombre = entity.Nombre,
-                Apellido = entity.Apellido,
-                DNI = entity.DNI,
-                Rol = entity.Rol,
-                Telefono = entity.Telefono,
-                EscuelaId = entity.EscuelaId,
-                EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                MesaId = entity.MesaId,
-                NroMesa = entity.Mesa?.NroMesa
-            };
-
-            return Ok(response);
+            return Ok(MapToResponse(entity));
         }
 
         [HttpPut("update/{id:int}")]
@@ -166,22 +101,7 @@ namespace ControlTerritorial.API.Controllers
             }
 
             var entity = result.Value!;
-
-            var response = new PersonaResponseDTO
-            {
-                Id = entity.Id,
-                Nombre = entity.Nombre,
-                Apellido = entity.Apellido,
-                DNI = entity.DNI,
-                Rol = entity.Rol,
-                Telefono = entity.Telefono,
-                EscuelaId = entity.EscuelaId,
-                EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
-                MesaId = entity.MesaId,
-                NroMesa = entity.Mesa?.NroMesa
-            };
-
-            return Ok(response);
+            return Ok(MapToResponse(entity));
         }
 
         [HttpDelete("delete/{id:int}")]
@@ -197,5 +117,23 @@ namespace ControlTerritorial.API.Controllers
             return NoContent();
         }
 
+        private static PersonaResponseDTO MapToResponse(Persona entity)
+        {
+            return new PersonaResponseDTO
+            {
+                Id = entity.Id,
+                Nombre = entity.Nombre,
+                Apellido = entity.Apellido,
+                DNI = entity.DNI,
+                Rol = entity.Rol,
+                Telefono = entity.Telefono,
+                EscuelaId = entity.EscuelaId,
+                EscuelaNombre = entity.Escuela?.NombreEstablecimiento,
+                MesaId = entity.MesaId,
+                NroMesa = entity.Mesa?.NroMesa,
+                LiderId = entity.LiderId,
+                LiderNombre = entity.Lider != null ? $"{entity.Lider.Nombre} {entity.Lider.Apellido}".Trim() : null
+            };
+        }
     }
 }

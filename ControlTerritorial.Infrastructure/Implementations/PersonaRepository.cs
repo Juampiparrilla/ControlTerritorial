@@ -82,6 +82,7 @@ namespace ControlTerritorial.Infrastructure.Implementations
         public async Task<IEnumerable<Persona>> BuscarPorRolAsync(PersonRole rol)
         {
             return await _context.Personas
+                .Include(p => p.Lider)
                 .Where(p => p.Rol == rol)
                 .ToListAsync();
         }

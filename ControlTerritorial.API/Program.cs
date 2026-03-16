@@ -21,14 +21,16 @@ builder.Services.AddCors(options =>
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
                 "http://localhost:5174",
-                "http://127.0.0.1:5174"
+                "http://127.0.0.1:5174",
+                "https://localhost:5173",
+                "https://localhost:5174"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
     );
 });
 
-// Cargar la configuraciÛn de appsettings.json y appsettings.{Environment}.json
+// Cargar la configuraciùn de appsettings.json y appsettings.{Environment}.json
 builder.Configuration
        .SetBasePath(builder.Environment.ContentRootPath)
        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -49,9 +51,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
 app.UseCors("FrontendDev");
 
 app.UseAuthorization();

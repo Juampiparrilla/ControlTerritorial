@@ -16,6 +16,9 @@ namespace ControlTerritorial.Application.DTOs
 
         public int? MesaId { get; set; }
         public int? NroMesa { get; set; }
+
+        public int? LiderId { get; set; }
+        public string? LiderNombre { get; set; }
     }
 }
 
