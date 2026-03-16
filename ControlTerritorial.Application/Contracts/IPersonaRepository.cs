@@ -8,6 +8,6 @@ namespace ControlTerritorial.Application.Contracts
         Task<Persona?> GetByDniAsync(string dni);
         Task<IEnumerable<Persona>> BuscarPorNombreOApellidoAsync(string? nombre, string? apellido);
         Task<IEnumerable<Persona>> BuscarPorRolAsync(PersonRole rol);
-        //Task<Persona?> GetWithSubordinadosAsync(int id);
+        Task<bool> TieneSubordinadosAsync(int liderId);        
     }
 }

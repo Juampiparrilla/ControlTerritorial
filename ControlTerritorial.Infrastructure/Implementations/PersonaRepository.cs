@@ -85,5 +85,10 @@ namespace ControlTerritorial.Infrastructure.Implementations
                 .Where(p => p.Rol == rol)
                 .ToListAsync();
         }
+
+        public async Task<bool> TieneSubordinadosAsync(int liderId)
+        {
+            return await _context.Personas.AnyAsync(p => p.LiderId == liderId);
+        }
     }
 }
