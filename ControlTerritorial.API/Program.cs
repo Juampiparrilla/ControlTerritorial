@@ -13,6 +13,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendDev", policy =>
+        policy
+            .WithOrigins(
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:5174",
+                "http://127.0.0.1:5174"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    );
+});
+
 // Cargar la configuración de appsettings.json y appsettings.{Environment}.json
 builder.Configuration
        .SetBasePath(builder.Environment.ContentRootPath)
@@ -36,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontendDev");
 
 app.UseAuthorization();
 
