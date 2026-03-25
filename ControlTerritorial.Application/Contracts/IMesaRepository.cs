@@ -4,6 +4,6 @@ namespace ControlTerritorial.Application.Contracts
 {
     public interface IMesaRepository : IRepository<Mesa>
     {
-        //Task<Mesa?> GetByIdWithPersonasAsync(int id);
+        Task<Mesa?> GetByEscuelaIdAndNroMesaAsync(int escuelaId, int nroMesa);
     }
 }

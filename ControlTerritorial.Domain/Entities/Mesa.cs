@@ -1,4 +1,4 @@
-﻿namespace ControlTerritorial.Domain.Entities
+namespace ControlTerritorial.Domain.Entities
 {
     public class Mesa
     {
@@ -25,6 +25,17 @@
 
             NroMesa = nroMesa;
             Orden = orden;           
+        }
+
+        public void AsignarEscuela(Escuela escuela)
+        {
+            Escuela = escuela;
+            EscuelaId = escuela.Id;
+        }
+
+        public void ActualizarOrden(string? orden)
+        {
+            Orden = string.IsNullOrWhiteSpace(orden) ? null : orden.Trim();
         }
     }
 }

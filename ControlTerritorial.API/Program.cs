@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
     );
 });
 
-// Cargar la configuraciùn de appsettings.json y appsettings.{Environment}.json
+// Cargar la configuraci¬ùn de appsettings.json y appsettings.{Environment}.json
 builder.Configuration
        .SetBasePath(builder.Environment.ContentRootPath)
        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -42,6 +42,9 @@ builder.Services.AddDbContext<DbContextControlTerritorial>(options =>
 
 builder.Services.AddScoped<IPersonaService,PersonaService>();
 builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IEscuelaRepository, EscuelaRepository>();
+builder.Services.AddScoped<IMesaRepository, MesaRepository>();
+builder.Services.AddScoped<IPadronService, PadronService>();
 
 var app = builder.Build();
 

@@ -53,6 +53,46 @@ namespace ControlTerritorial.Domain.Entities
             LiderId = liderId;
         }
 
+        public void AsignarMesa(Escuela escuela, Mesa mesa)
+        {
+            Escuela = escuela;
+            EscuelaId = escuela.Id;
+            Mesa = mesa;
+            MesaId = mesa.Id;
+        }
+
+        public void LimpiarMesa()
+        {
+            Mesa = null;
+            MesaId = null;
+        }
+
+        public void CompletarCamposDesdePadron(string nombre, string apellido, Escuela escuela, Mesa mesa)
+        {
+            if (string.IsNullOrWhiteSpace(Nombre))
+            {
+                Nombre = nombre;
+                Apellido = apellido;
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(Apellido)) Apellido = apellido;
+                if (string.IsNullOrWhiteSpace(Nombre)) Nombre = nombre;
+            }
+
+            if (EscuelaId == null)
+            {
+                Escuela = escuela;
+                EscuelaId = escuela.Id;
+            }
+
+            if (MesaId == null)
+            {
+                Mesa = mesa;
+                MesaId = mesa.Id;
+            }
+        }
+
         public void ActualizarDatos(string nombre, string apellido, string dni, PersonRole rol, string? telefono, Escuela? escuela, int? liderId)
         {
             if (string.IsNullOrEmpty(nombre))

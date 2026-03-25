@@ -49,17 +49,26 @@ namespace ControlTerritorial.Infrastructure.Implementations
 
         public async Task<IEnumerable<Persona>> GetAllAsync()
         {
-            return await _context.Personas.ToListAsync();
+            return await _context.Personas
+                .Include(p => p.Escuela)
+                .Include(p => p.Mesa)
+                .ToListAsync();
         }
 
         public async Task<Persona?> GetByIdAsync(int id)
         {
-            return await _context.Personas.FindAsync(id);
+            return await _context.Personas
+                .Include(p => p.Escuela)
+                .Include(p => p.Mesa)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Persona?> GetByDniAsync(string dni)
         {
-            return await _context.Personas.FirstOrDefaultAsync(p => p.DNI == dni);
+            return await _context.Personas
+                .Include(p => p.Escuela)
+                .Include(p => p.Mesa)
+                .FirstOrDefaultAsync(p => p.DNI == dni);
         }
 
         public async Task<IEnumerable<Persona>> BuscarPorNombreOApellidoAsync(string? nombre, string? apellido)
@@ -83,6 +92,8 @@ namespace ControlTerritorial.Infrastructure.Implementations
         {
             return await _context.Personas
                 .Include(p => p.Lider)
+                .Include(p => p.Escuela)
+                .Include(p => p.Mesa)
                 .Where(p => p.Rol == rol)
                 .ToListAsync();
         }

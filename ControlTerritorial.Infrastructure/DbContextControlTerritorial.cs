@@ -1,4 +1,4 @@
-﻿using ControlTerritorial.Domain.Entities;
+using ControlTerritorial.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlTerritorial.Infrastructure
@@ -12,5 +12,7 @@ namespace ControlTerritorial.Infrastructure
         public DbSet<Escuela> Escuelas { get; set; }
         public DbSet<Mesa> Mesas { get; set; }
         public DbSet<Vehiculo> Vehiculos { get; set; }
+        public DbSet<PadronImport> PadronesImportados { get; set; }
+        public DbSet<PadronRow> PadronFilas { get; set; }
     }
 }

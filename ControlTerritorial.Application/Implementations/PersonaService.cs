@@ -9,9 +9,14 @@ namespace ControlTerritorial.Application.Implementations
     public class PersonaService : IPersonaService
     {
         private readonly IPersonaRepository _personaRepository;
-        public PersonaService(IPersonaRepository personaRepository)
+        private readonly IEscuelaRepository _escuelaRepository;
+        private readonly IMesaRepository _mesaRepository;
+
+        public PersonaService(IPersonaRepository personaRepository, IEscuelaRepository escuelaRepository, IMesaRepository mesaRepository)
         {
             _personaRepository = personaRepository;
+            _escuelaRepository = escuelaRepository;
+            _mesaRepository = mesaRepository;
         }
         public async Task<Result<Persona>> CrearPersonaAsync(CreatePersonaDTO personaDto)
         {
@@ -30,10 +35,32 @@ namespace ControlTerritorial.Application.Implementations
             }
 
             Escuela? escuelaNueva = null;
+            Mesa? mesaNueva = null;
 
             if (!string.IsNullOrWhiteSpace(personaDto.Escuela))
             {
-                escuelaNueva = new Escuela(personaDto.Escuela, string.Empty);
+                escuelaNueva = await _escuelaRepository.GetByNombreEstablecimientoAsync(personaDto.Escuela.Trim());
+                if (escuelaNueva == null)
+                {
+                    escuelaNueva = new Escuela(personaDto.Escuela.Trim(), string.Empty);
+                    await _escuelaRepository.AddAsync(escuelaNueva);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(personaDto.Mesa) && escuelaNueva != null)
+            {
+                if (!int.TryParse(personaDto.Mesa.Trim(), out var nroMesa))
+                {
+                    return Result<Persona>.Fail("Mesa inválida.");
+                }
+
+                mesaNueva = await _mesaRepository.GetByEscuelaIdAndNroMesaAsync(escuelaNueva.Id, nroMesa);
+                if (mesaNueva == null)
+                {
+                    mesaNueva = new Mesa(nroMesa, null);
+                    mesaNueva.AsignarEscuela(escuelaNueva);
+                    await _mesaRepository.AddAsync(mesaNueva);
+                }
             }
 
             var persona = new Persona(
@@ -45,6 +72,11 @@ namespace ControlTerritorial.Application.Implementations
                 escuelaNueva,
                 personaDto.LiderId
             );
+
+            if (escuelaNueva != null && mesaNueva != null)
+            {
+                persona.AsignarMesa(escuelaNueva, mesaNueva);
+            }
 
             var createdResult = await _personaRepository.AddAsync(persona);
 
@@ -87,10 +119,37 @@ namespace ControlTerritorial.Application.Implementations
             }
 
             Escuela? escuelaNueva = null;
+            Mesa? mesaNueva = null;
 
             if (!string.IsNullOrWhiteSpace(personaDto.Escuela))
             {
-                escuelaNueva = new Escuela(personaDto.Escuela, string.Empty);
+                escuelaNueva = await _escuelaRepository.GetByNombreEstablecimientoAsync(personaDto.Escuela.Trim());
+                if (escuelaNueva == null)
+                {
+                    escuelaNueva = new Escuela(personaDto.Escuela.Trim(), string.Empty);
+                    await _escuelaRepository.AddAsync(escuelaNueva);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(personaDto.Mesa))
+            {
+                if (escuelaNueva == null)
+                {
+                    return Result<Persona>.Fail("Debe indicar Escuela para asignar Mesa.");
+                }
+
+                if (!int.TryParse(personaDto.Mesa.Trim(), out var nroMesa))
+                {
+                    return Result<Persona>.Fail("Mesa inválida.");
+                }
+
+                mesaNueva = await _mesaRepository.GetByEscuelaIdAndNroMesaAsync(escuelaNueva.Id, nroMesa);
+                if (mesaNueva == null)
+                {
+                    mesaNueva = new Mesa(nroMesa, null);
+                    mesaNueva.AsignarEscuela(escuelaNueva);
+                    await _mesaRepository.AddAsync(mesaNueva);
+                }
             }
 
             persona.ActualizarDatos(
@@ -102,6 +161,15 @@ namespace ControlTerritorial.Application.Implementations
                 escuelaNueva,
                 personaDto.LiderId
             );
+
+            if (mesaNueva != null && escuelaNueva != null)
+            {
+                persona.AsignarMesa(escuelaNueva, mesaNueva);
+            }
+            else if (string.IsNullOrWhiteSpace(personaDto.Mesa))
+            {
+                persona.LimpiarMesa();
+            }
 
             await _personaRepository.UpdateAsync(persona);
 
