@@ -76,7 +76,7 @@ namespace ControlTerritorial.Application.Implementations
             {
                 Username = username,
                 PasswordHash = _passwordHasher.Hash(dto.Password),
-                Role = dto.Role,
+                SystemRole = dto.SystemRole,
                 PersonaId = dto.PersonaId,
                 IsActive = dto.IsActive,
                 CreatedAt = DateTime.UtcNow,
@@ -103,7 +103,7 @@ namespace ControlTerritorial.Application.Implementations
             }
 
             usuario.Username = username;
-            usuario.Role = dto.Role;
+            usuario.SystemRole = dto.SystemRole;
             usuario.PersonaId = dto.PersonaId;
             usuario.IsActive = dto.IsActive;
             usuario.TouchUpdated();
@@ -117,7 +117,7 @@ namespace ControlTerritorial.Application.Implementations
             var usuario = await _usuarioRepository.GetByIdAsync(id, cancellationToken).ConfigureAwait(false)
                 ?? throw new KeyNotFoundException("Usuario no encontrado.");
 
-            if (usuario.Role == SystemRole.AdminSistema)
+            if (usuario.SystemRole == SystemRole.AdminSistema)
             {
                 var adminCount = await _usuarioRepository.CountByRoleAsync(SystemRole.AdminSistema, cancellationToken).ConfigureAwait(false);
                 if (adminCount <= 1)
@@ -145,10 +145,10 @@ namespace ControlTerritorial.Application.Implementations
             var usuario = await _usuarioRepository.GetByIdAsync(id, cancellationToken).ConfigureAwait(false)
                 ?? throw new KeyNotFoundException("Usuario no encontrado.");
 
-            if (usuario.Role == SystemRole.AdminSistema && usuario.IsActive)
+            if (usuario.SystemRole == SystemRole.AdminSistema && usuario.IsActive)
             {
                 var activeAdmins = await _usuarioRepository.GetAllAsync(cancellationToken).ConfigureAwait(false);
-                var activeAdminCount = activeAdmins.Count(u => u.Role == SystemRole.AdminSistema && u.IsActive);
+                var activeAdminCount = activeAdmins.Count(u => u.SystemRole == SystemRole.AdminSistema && u.IsActive);
                 if (activeAdminCount <= 1)
                 {
                     throw new InvalidOperationException("No se puede desactivar el último administrador activo del sistema.");
@@ -182,7 +182,7 @@ namespace ControlTerritorial.Application.Implementations
             {
                 Id = usuario.Id,
                 Username = usuario.Username,
-                Role = usuario.Role,
+                SystemRole = usuario.SystemRole,
                 IsActive = usuario.IsActive,
                 PersonaId = usuario.PersonaId,
                 PersonaNombre = nombre,

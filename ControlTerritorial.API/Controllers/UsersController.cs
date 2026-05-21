@@ -261,7 +261,7 @@ namespace ControlTerritorial.API.Controllers
                     {
                         Username = username,
                         Password = request.Password,
-                        Role = request.Role,
+                        SystemRole = request.SystemRole,
                         IsActive = true,
                     },
                     cancellationToken).ConfigureAwait(false);

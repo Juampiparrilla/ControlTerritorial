@@ -25,7 +25,7 @@ namespace ControlTerritorial.Infrastructure
                 entity.HasIndex(e => e.PersonaId).IsUnique();
                 entity.Property(e => e.Username).HasMaxLength(64);
                 entity.Property(e => e.PasswordHash).HasMaxLength(200);
-                entity.Property(e => e.Role).HasConversion<int>();
+                entity.Property(e => e.SystemRole).HasConversion<int>();
                 entity.HasOne(e => e.Persona)
                     .WithMany()
                     .HasForeignKey(e => e.PersonaId)

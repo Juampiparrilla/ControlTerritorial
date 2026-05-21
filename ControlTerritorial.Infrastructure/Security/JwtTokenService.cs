@@ -26,7 +26,7 @@ namespace ControlTerritorial.Infrastructure.Security
             }
 
             var expiresAtUtc = DateTime.UtcNow.AddMinutes(_settings.ExpirationMinutes);
-            var roleName = usuario.Role.ToString();
+            var roleName = usuario.SystemRole.ToString();
 
             var claims = new List<Claim>
             {

@@ -45,7 +45,7 @@ namespace ControlTerritorial.Infrastructure.Implementations
 
         public Task<int> CountByRoleAsync(SystemRole role, CancellationToken cancellationToken = default)
         {
-            return _context.Usuarios.CountAsync(u => u.Role == role, cancellationToken);
+            return _context.Usuarios.CountAsync(u => u.SystemRole == role, cancellationToken);
         }
 
         public async Task AddAsync(Usuario usuario, CancellationToken cancellationToken = default)
