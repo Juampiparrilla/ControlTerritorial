@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Text.Json;
-using System.IO;
 using ControlTerritorial.Application.Contracts;
 using ControlTerritorial.Application.DTOs;
 using ControlTerritorial.Domain.Common;
@@ -29,35 +27,6 @@ namespace ControlTerritorial.Infrastructure.Implementations
             }
 
             using var tx = await _context.Database.BeginTransactionAsync();
-
-            var logPath = @"C:\Users\Juampi\Desktop\Proyectos\control-territorial-frontend\.cursor\debug-b35ed6.log";
-            void TryAppendLog(string line)
-            {
-                try
-                {
-                    File.AppendAllText(logPath, line + Environment.NewLine);
-                }
-                catch
-                {
-                    // Best-effort debug logging: never block the import flow.
-                }
-            }
-
-            // #region agent log
-            var padronFilasCountBefore = await _context.PadronFilas.CountAsync();
-            var debugId1 = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}_{Guid.NewGuid():N}";
-            TryAppendLog(JsonSerializer.Serialize(new
-            {
-                sessionId = "b35ed6",
-                id = debugId1,
-                timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                location = "PadronService.cs:ImportarPadronAsync:before-delete-all",
-                message = "Padron import: PadronFilas count before delete all",
-                runId = "debug",
-                hypothesisId = "H_PADRON_DELETE_ALL_ROWS",
-                data = new { padronFilasCountBefore }
-            }));
-            // #endregion
 
             // Asegurar que PadronFilas contenga solo el último padrón importado.
             // Requerimiento: si el usuario carga un nuevo padrón, NO deben quedar filas viejas.
@@ -86,26 +55,6 @@ namespace ControlTerritorial.Infrastructure.Implementations
 
             _context.PadronFilas.AddRange(rows);
             await _context.SaveChangesAsync();
-
-            // #region agent log
-            var debugId2 = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}_{Guid.NewGuid():N}";
-            TryAppendLog(JsonSerializer.Serialize(new
-                {
-                    sessionId = "b35ed6",
-                    id = debugId2,
-                    timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                    location = "PadronService.cs:ImportarPadronAsync:after-insert",
-                    message = "Padron import: rows inserted",
-                    runId = "debug",
-                    hypothesisId = "H_PADRON_DELETE_ALL_ROWS",
-                    data = new
-                    {
-                        insertedRows = rows.Count,
-                        activeRowsNow = await _context.PadronFilas.CountAsync(r => r.PadronImportId == import.Id),
-                        totalRowsNow = await _context.PadronFilas.CountAsync()
-                    }
-                }));
-            // #endregion
 
             await tx.CommitAsync();
 

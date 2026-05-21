@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using ControlTerritorial.Application.Contracts;
 using ControlTerritorial.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ClosedXML.Excel;
 
 namespace ControlTerritorial.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PadronController : ControllerBase

@@ -2,10 +2,12 @@ using ControlTerritorial.Application.Contracts;
 using ControlTerritorial.Application.DTOs;
 using ControlTerritorial.Domain.Entities;
 using ControlTerritorial.Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlTerritorial.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonaController : ControllerBase

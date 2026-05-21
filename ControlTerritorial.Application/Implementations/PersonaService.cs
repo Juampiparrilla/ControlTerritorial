@@ -80,18 +80,6 @@ namespace ControlTerritorial.Application.Implementations
 
             var createdResult = await _personaRepository.AddAsync(persona);
 
-            // #region agent log
-            try
-            {
-                var logLine =
-                    $"{{\"sessionId\":\"65c324\",\"runId\":\"pre-fix\",\"hypothesisId\":\"H2\",\"location\":\"PersonaService.CrearPersonaAsync\",\"message\":\"Persona created\",\"data\":{{\"PersonaId\":{persona.Id},\"Rol\":{(int)persona.Rol},\"LiderId\":{(persona.LiderId.HasValue ? persona.LiderId.Value.ToString() : "null")}}},\"timestamp\":{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}{Environment.NewLine}";
-                System.IO.File.AppendAllText("C:\\Users\\Juampi\\Desktop\\Proyectos\\control-territorial-frontend\\debug-65c324.log", logLine);
-            }
-            catch
-            {
-            }
-            // #endregion
-
             return createdResult;
         }
 

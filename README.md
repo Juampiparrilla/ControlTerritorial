@@ -44,9 +44,9 @@ El sistema maneja distintos niveles con diferentes alcances y permisos de visibi
 - `ControlTerritorial.Infrastructure`: Implementaciones técnicas. Contexto de Base de datos (DbContext), Migraciones y clases concretas de Repositorios.
 
 ## 🚧 Próximos Pasos (Roadmap)
-- [] Implementación de UI/Frontend.
+- [x] Implementación de UI/Frontend.
 - [] Desarrollo del módulo de control y seguimiento en tiempo real ("Día D").
-- [] Implementación de Seguridad/Autenticación con JWT.
+- [x] Implementación de Seguridad/Autenticación con JWT.
 - [] Integración de georreferenciación.
 
 ---
