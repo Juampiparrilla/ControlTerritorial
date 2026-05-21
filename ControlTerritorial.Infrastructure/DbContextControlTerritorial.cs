@@ -21,11 +21,15 @@ namespace ControlTerritorial.Infrastructure
         {
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.HasIndex(e => new { e.Dni, e.TenantId }).IsUnique();
-                entity.Property(e => e.Dni).HasMaxLength(32);
+                entity.HasIndex(e => e.Username).IsUnique();
+                entity.HasIndex(e => e.PersonaId).IsUnique();
+                entity.Property(e => e.Username).HasMaxLength(64);
                 entity.Property(e => e.PasswordHash).HasMaxLength(200);
-                entity.Property(e => e.Role).HasMaxLength(64);
-                entity.Property(e => e.TenantId).HasMaxLength(64);
+                entity.Property(e => e.Role).HasConversion<int>();
+                entity.HasOne(e => e.Persona)
+                    .WithMany()
+                    .HasForeignKey(e => e.PersonaId)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

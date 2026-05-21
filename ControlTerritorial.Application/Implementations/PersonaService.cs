@@ -20,6 +20,11 @@ namespace ControlTerritorial.Application.Implementations
         }
         public async Task<Result<Persona>> CrearPersonaAsync(CreatePersonaDTO personaDto)
         {
+            if (personaDto.Rol == PersonRole.Administrador)
+            {
+                return Result<Persona>.Fail("El rol Administrador territorial ya no está disponible. Gestioná accesos desde Usuarios del sistema.");
+            }
+
             // Validar unicidad de DNI
             var existenteConMismoDni = await _personaRepository.GetByDniAsync(personaDto.DNI);
             if (existenteConMismoDni is not null)
@@ -85,6 +90,11 @@ namespace ControlTerritorial.Application.Implementations
 
         public async Task<Result<Persona>> EditarPersonaAsync(int id, CreatePersonaDTO personaDto)
         {
+            if (personaDto.Rol == PersonRole.Administrador)
+            {
+                return Result<Persona>.Fail("El rol Administrador territorial ya no está disponible. Gestioná accesos desde Usuarios del sistema.");
+            }
+
             var persona = await _personaRepository.GetByIdAsync(id);
 
             if (persona is null)
@@ -218,26 +228,23 @@ namespace ControlTerritorial.Application.Implementations
 
         private async Task<Result<bool>> ValidarJerarquiaAsync(PersonRole rol, int? liderId)
         {
-            // Administrador: no requiere líder
             if (rol == PersonRole.Administrador)
+            {
+                return Result<bool>.Fail("El rol Administrador territorial ya no está disponible.");
+            }
+
+            if (rol == PersonRole.Grupo || rol == PersonRole.Chofer)
             {
                 if (liderId.HasValue)
                 {
-                    return Result<bool>.Fail("Un administrador no debe tener líder asignado.");
+                    return Result<bool>.Fail("Este rol no debe tener líder asignado.");
                 }
 
                 return Result<bool>.Success(true);
             }
 
-            // Para el resto de roles (Grupo, Referente, Puntero, Votante, Chofer) si se especifica líder, validamos que exista
             if (!liderId.HasValue)
             {
-                // Para Referente, Puntero y Votante exigimos líder
-                if (rol == PersonRole.Grupo || rol == PersonRole.Chofer)
-                {
-                    return Result<bool>.Success(true);
-                }
-
                 return Result<bool>.Fail("El rol seleccionado requiere un líder asociado.");
             }
 
@@ -247,16 +254,8 @@ namespace ControlTerritorial.Application.Implementations
                 return Result<bool>.Fail("El líder asociado no existe.");
             }
 
-            // Reglas específicas de jerarquía
             switch (rol)
             {
-                case PersonRole.Grupo:
-                    if (lider.Rol != PersonRole.Administrador)
-                    {
-                        return Result<bool>.Fail("Un grupo debe tener como líder a un administrador.");
-                    }
-                    break;
-
                 case PersonRole.Referente:
                     if (lider.Rol != PersonRole.Grupo)
                     {
@@ -276,10 +275,6 @@ namespace ControlTerritorial.Application.Implementations
                     {
                         return Result<bool>.Fail("Un votante debe tener como líder a un puntero.");
                     }
-                    break;
-
-                case PersonRole.Chofer:
-                    // Chofer puede tener como líder a cualquier rol, por ahora no restringimos más
                     break;
             }
 

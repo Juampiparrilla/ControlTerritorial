@@ -2,7 +2,8 @@
 {
     public enum PersonRole
     {
-        Administrador,         // Puede gestionar usuarios, roles, permisos y ver toda la Información de todos los grupos.
+        [Obsolete("Rol territorial obsoleto. Usar SystemRole en Usuario para accesos al sistema.")]
+        Administrador = 0,
         Grupo,                 // Puede gestionar su propia Información, ver la Información de sus miembros (Referentes y Punteros).
         Referente,             // Puede gestionar su propia Información, ver la Información de sus miembros (Punteros).
         Puntero,               // Solo puede ver y gestionar su propia Información y la de su listado.

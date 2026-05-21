@@ -26,14 +26,25 @@ namespace ControlTerritorial.Infrastructure.Security
             }
 
             var expiresAtUtc = DateTime.UtcNow.AddMinutes(_settings.ExpirationMinutes);
+            var roleName = usuario.Role.ToString();
 
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new("userId", usuario.Id.ToString()),
-                new("dni", usuario.Dni),
-                new(ClaimTypes.Role, usuario.Role),
+                new(ClaimTypes.Name, usuario.Username),
+                new(ClaimTypes.Role, roleName),
+                new("systemRole", roleName),
             };
+
+            if (usuario.PersonaId.HasValue)
+            {
+                claims.Add(new Claim("personaId", usuario.PersonaId.Value.ToString()));
+                if (usuario.Persona is not null && !string.IsNullOrWhiteSpace(usuario.Persona.DNI))
+                {
+                    claims.Add(new Claim("dni", usuario.Persona.DNI));
+                }
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
